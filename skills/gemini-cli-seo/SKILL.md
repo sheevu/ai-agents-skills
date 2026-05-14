@@ -1,138 +1,130 @@
 ---
 name: gemini-cli-seo
-description: Use when the user wants to automate SEO tasks using Gemini CLI — meta titles, meta descriptions, alt text, schema markup, keyword research, or bulk page optimization. Trigger phrases: "Gemini CLI SEO," "bulk meta tags via CLI," "automate SEO with Gemini," "generate schema with Gemini CLI." For AI-powered SEO strategy, see ai-seo.
-version: 1.0.0
-author: Sheevum Goel
-tags: [gemini-cli, seo, meta-tags, schema, keyword-research, automation]
+description: "Use when the user wants to automate SEO tasks using Gemini CLI — meta titles, meta descriptions, alt text, schema markup, keyword research, or bulk page optimization. Trigger phrases: Gemini CLI SEO, bulk meta tags via CLI, automate SEO with Gemini, generate schema with Gemini CLI. For AI-powered SEO strategy see ai-seo."
+version: "1.0.0"
+author: "Sheevum Goel"
+tags:
+  - gemini-cli
+  - seo
+  - meta-tags
+  - schema
+  - keyword-research
+  - automation
 ---
 
 ## Overview
 
-You are a Gemini CLI SEO automation expert. Help the user bulk-generate and optimize SEO elements — meta tags, alt texts, schema JSON-LD, and keyword-rich content — using Gemini CLI from the terminal.
+You are a Gemini CLI SEO automation expert. Help the user generate SEO assets in bulk — meta titles, descriptions, alt text, schema markup, and keyword clusters — using Gemini CLI scripts for websites, e-commerce stores, and MSME landing pages.
 
-## Meta Title & Description
+## When to Use
 
-### Single Page
+- User needs bulk meta tags for multiple pages
+- User wants AI-generated keyword research from CLI
+- User wants schema markup (JSON-LD) auto-generated
+- User needs alt text for product images at scale
+- User wants SEO content briefs from terminal
+
+## Prerequisites
+
+- Gemini CLI installed and authenticated (see `gemini-cli-setup`)
+- A list of URLs, product names, or page topics in a `.txt` or `.csv` file
+
+## Core SEO Commands
+
+### Meta Title + Description
 
 ```bash
-gemini --model gemini-1.5-flash --temperature 0.3 prompt \
-"Write an SEO meta title (under 60 chars) and meta description (under 155 chars) for a page about: [topic]. Target keyword: [keyword]. Brand: [brand name]."
+gemini prompt "Write an SEO meta title (60 chars) and meta description (155 chars) for a page about: MSME loans in Uttar Pradesh"
 ```
 
-### Bulk Meta Tags from CSV
+### Bulk Meta Tags from File
 
 Create `pages.txt`:
 ```
-AI CRM for small businesses in India
-MSME loan scheme guide 2026
-Numerology personal report service
+MSME loans Uttar Pradesh
+Startup India registration
+PMEGP scheme benefits
+MUDRA loan eligibility
 ```
 
-Run bulk generation:
+Run batch script:
 ```bash
-while IFS= read -r page; do
-  echo "=== $page ==" >> meta_output.txt
-  gemini --model gemini-1.5-flash --temperature 0.2 prompt \
-  "Write SEO meta title (max 60 chars) and meta description (max 155 chars) for: $page" >> meta_output.txt
-  echo "" >> meta_output.txt
+while IFS= read -r topic; do
+  echo "=== $topic ==="
+  gemini prompt "Write SEO meta title and description for: $topic"
 done < pages.txt
 ```
 
-## Alt Text for Images
+### Keyword Research
 
 ```bash
-gemini --model gemini-1.5-flash prompt \
-"Write SEO-friendly alt text (under 125 chars) for an image showing: [describe image]. Page context: [page topic]. Target keyword: [keyword]."
+gemini prompt "Generate 20 long-tail SEO keywords for a digital marketing agency targeting MSMEs in India. Group by intent: informational, transactional, navigational."
 ```
 
-### Bulk Alt Text
+### Schema Markup (JSON-LD)
 
 ```bash
-gemini prompt "Write 10 alt text variations for product images of [product name] targeting the keyword '[keyword]'" > alt_texts.txt
+gemini prompt "Generate JSON-LD schema markup for a local business named 'Sheevum Digital' located in Lucknow, UP, India. Service: AI marketing for MSMEs."
 ```
 
-## Schema Markup (JSON-LD)
-
-### Local Business Schema
+### Alt Text for Images
 
 ```bash
-gemini --model gemini-1.5-pro --temperature 0.1 prompt \
-"Generate a complete JSON-LD LocalBusiness schema for:
-Business name: [name]
-Type: [type e.g. TechCompany]
-Address: [full address]
-City: Lucknow, Uttar Pradesh, India
-Phone: [phone]
-Website: [url]
-Description: [description]"
+gemini prompt "Write SEO-friendly alt text for a product image showing: a small business owner using AI software on a laptop in an Indian office setting"
 ```
 
-### Product Schema
+### Content Brief Generator
 
 ```bash
-gemini --temperature 0.1 prompt \
-"Generate JSON-LD Product schema for: [product name]. Price: [price]. Currency: INR. Description: [desc]. Brand: [brand]."
+gemini prompt "Create an SEO content brief for a blog post targeting the keyword: best AI tools for MSMEs India 2025. Include: title, H2s, word count, LSI keywords, CTA."
 ```
 
-### FAQ Schema
+## Automation Script: Bulk Meta Tag Generator
 
 ```bash
-gemini --temperature 0.2 prompt \
-"Generate JSON-LD FAQPage schema with 5 Q&As about [topic]. Optimised for Google rich results."
+#!/bin/bash
+# bulk-meta.sh — Generate meta tags for multiple pages
+
+INPUT_FILE="pages.txt"
+OUTPUT_FILE="meta-output.md"
+
+echo "# SEO Meta Tags - Generated by Gemini CLI" > $OUTPUT_FILE
+echo "Generated: $(date)" >> $OUTPUT_FILE
+echo "" >> $OUTPUT_FILE
+
+while IFS= read -r page; do
+  echo "## $page" >> $OUTPUT_FILE
+  gemini prompt "Write SEO meta title (max 60 chars) and meta description (max 155 chars) for: $page" >> $OUTPUT_FILE
+  echo "" >> $OUTPUT_FILE
+done < $INPUT_FILE
+
+echo "Done! Output saved to $OUTPUT_FILE"
 ```
 
-## Keyword Research
+Run:
+```bash
+chmod +x bulk-meta.sh && ./bulk-meta.sh
+```
+
+## Temperature Settings for SEO
 
 ```bash
-gemini --model gemini-1.5-pro prompt \
-"List 20 long-tail SEO keywords for a [type of business] targeting [audience] in India. Include search intent (informational/commercial/transactional) for each."
+# Use low temperature for factual SEO output
+export GEMINI_TEMPERATURE=0.2
+
+# Use medium for creative title variations
+export GEMINI_TEMPERATURE=0.5
 ```
 
-### LSI Keywords
+## Integration with This Repo
 
-```bash
-gemini prompt \
-"Generate 15 LSI (Latent Semantic Indexing) keywords related to the primary keyword: '[keyword]'. Format as a comma-separated list."
-```
+- Pair with `gemini-cli-copywriting` for SEO-optimized blog content
+- Pair with `gemini-cli-content-strategy` for keyword-driven content calendar
+- Pair with `gemini-cli-msme-growth` for local SEO content targeting Indian MSMEs
 
-## Content Optimization
+## Tips
 
-### SEO Blog Outline
-
-```bash
-gemini --model gemini-1.5-pro prompt \
-"Create an SEO-optimized blog outline for the keyword: '[target keyword]'. Include: title tag, meta description, H2s, H3s, and suggested word count per section."
-```
-
-### Title Tag Variations
-
-```bash
-gemini prompt \
-"Write 10 SEO title tag variations for the keyword '[keyword]'. Mix question-based, how-to, list, and direct formats. Max 60 chars each."
-```
-
-## Temperature Guide for SEO Tasks
-
-| Task | Temperature |
-|---|---|
-| Schema markup | 0.1 — must be precise |
-| Meta descriptions | 0.2–0.3 |
-| Keyword research | 0.3 |
-| Blog outlines | 0.4 |
-| Title variations | 0.5 |
-
-## Save & Export
-
-```bash
-# Export all SEO output to one file
-gemini prompt "[SEO task]" >> seo-output.txt
-
-# Export schema as JSON
-gemini prompt "Generate LocalBusiness schema for..." | grep -A 100 '{' > schema.json
-```
-
-## Related Skills
-
-- `gemini-cli-copywriting` — keyword-rich copy
-- `gemini-cli-content-strategy` — full SEO content plan
-- `gemini-cli-ad-creative` — PPC ad copy
+- Always review and edit AI-generated meta tags before publishing
+- Keep a log of generated outputs in a dated folder: `seo-output/YYYY-MM-DD/`
+- Pipe outputs to `.md` files for easy review: `gemini prompt "..." >> output.md`
+- Use `--model gemini-1.5-pro` for highest quality SEO writing
