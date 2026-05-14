@@ -1,113 +1,131 @@
 ---
 name: gemini-cli-lead-magnets
-description: Use when the user wants to create lead magnets — ebooks, checklists, guides, templates, or free tools — using Gemini CLI. Trigger phrases: "create lead magnet with Gemini CLI," "generate ebook outline via CLI," "checklist generator Gemini," "free resource creation CLI." For email delivery, see gemini-cli-cold-email.
-version: 1.0.0
-author: Sheevum Goel
-tags: [gemini-cli, lead-magnets, ebooks, checklists, content-upgrades, list-building]
+description: "Use when the user wants to create lead magnets — ebooks, checklists, guides, templates, or free tools — using Gemini CLI. Trigger phrases: create lead magnet with Gemini CLI, generate ebook outline via CLI, checklist generator Gemini, free resource creation CLI. For email delivery see gemini-cli-cold-email."
+version: "1.0.0"
+author: "Sheevum Goel"
+tags:
+  - gemini-cli
+  - lead-magnets
+  - ebooks
+  - checklists
+  - content-upgrades
+  - list-building
+  - lead-generation
 ---
 
 ## Overview
 
-You are a Gemini CLI lead magnet creation expert. Help the user generate high-value lead magnets — ebooks, checklists, swipe files, email courses, and templates — using Gemini CLI to grow their email list and generate qualified leads.
+You are a Gemini CLI lead magnet creation expert. Help the user create high-value lead magnets — ebooks, checklists, how-to guides, templates, and resource lists — using Gemini CLI to grow email lists, attract MSME clients, and build brand authority.
 
-## Checklist Generator
+## When to Use
 
-```bash
-gemini --model gemini-1.5-pro --temperature 0.5 prompt \
-"Create a detailed checklist titled: '[Checklist Title]'. Target audience: [audience]. Include 20 actionable items grouped into 4 sections. Format with checkboxes (- [ ] item). Make it immediately actionable."
-```
+- User wants to create an ebook or guide outline
+- User needs a checklist for their audience
+- User wants a free template or swipe file
+- User needs a lead magnet for a landing page
+- User wants to create a mini-course outline
 
-### Example for MSME
+## Prerequisites
 
-```bash
-gemini prompt \
-"Create a '25-Point MSME Digital Marketing Checklist for 2026' for small business owners in India. Group into: Website, Social Media, SEO, Paid Ads, and Automation. Format with checkboxes."
-```
+- Gemini CLI installed and authenticated (see `gemini-cli-setup`)
+- Target audience and topic defined
+- Format decided: ebook, checklist, template, guide
 
-## Ebook Outline
+## Core Lead Magnet Commands
 
-```bash
-gemini --model gemini-1.5-pro --temperature 0.6 prompt \
-"Create a detailed ebook outline titled: '[Ebook Title]'. Target reader: [audience]. Include: intro chapter, 5 main chapters with 3 subheadings each, conclusion, and a bonus section. Each chapter description in 2 sentences."
-```
-
-### Generate Chapter Content
+### Ebook Outline
 
 ```bash
-gemini --model gemini-1.5-pro prompt \
-"Write Chapter [X] of an ebook about [topic]. Chapter title: [title]. Subheadings: [list subheadings]. Length: 600-800 words. Tone: [expert/friendly/simple]. Include 1 practical example and 1 key takeaway box."
+gemini prompt "Create a detailed 10-chapter ebook outline titled: The Complete Guide to AI Marketing for Indian MSMEs. Include chapter titles, subheadings (3 per chapter), and a 30-word description per chapter. Target audience: MSME owners in Tier 2/3 Indian cities."
 ```
 
-### Full Ebook from Outline (Batch)
+### Checklist
+
+```bash
+gemini prompt "Create a 25-point checklist: Digital Marketing Audit for MSME Businesses in India. Group into 5 categories: Website, SEO, Social Media, Email Marketing, Paid Ads. Format as a printable checklist with checkboxes."
+```
+
+### How-To Guide
+
+```bash
+gemini prompt "Write a step-by-step guide: How to Get Your First 100 Customers Using AI Marketing Tools. 8 steps. Each step: title, 100-word explanation, and 1 actionable tip. Target: Indian startup founders."
+```
+
+### Swipe File / Template
+
+```bash
+gemini prompt "Create a swipe file of 10 proven social media post templates for MSME businesses. Each template: platform (Instagram/LinkedIn), post type, fill-in-the-blank format, and example. Format as a ready-to-use document."
+```
+
+### Mini-Course Outline
+
+```bash
+gemini prompt "Create a 5-day email mini-course outline titled: AI Marketing Basics for Small Business Owners. Each day: subject line, key lesson, 1 exercise, and 1 resource recommendation."
+```
+
+### Resource List / Toolkit
+
+```bash
+gemini prompt "Create a curated resource list: The Ultimate AI Toolkit for MSME Marketing in India. Categories: Content Creation, SEO, Social Media, Email, Analytics. 5 tools per category with name, use case, free/paid, and link placeholder."
+```
+
+## Automation Script: Full Ebook Chapter Generator
 
 ```bash
 #!/bin/bash
-EBOOK_TITLE="How to Grow Your MSME with AI in 2026"
-CHAPTERS=("Why AI Matters for Small Business" "Free AI Tools for MSMEs" "AI for Marketing Automation" "AI for Customer Service" "Getting Government Funding for AI Adoption")
+# ebook-generator.sh — Generate ebook chapters
 
-for i in "${!CHAPTERS[@]}"; do
-  CHAP_NUM=$((i+1))
-  echo "# Chapter $CHAP_NUM: ${CHAPTERS[$i]}" >> ebook_output.md
-  gemini --model gemini-1.5-pro --temperature 0.6 prompt \
-  "Write Chapter $CHAP_NUM: '${CHAPTERS[$i]}' for an ebook titled '$EBOOK_TITLE'. Target: Indian MSME owners. 700 words. Friendly expert tone." >> ebook_output.md
-  echo "\n---\n" >> ebook_output.md
+TITLE="The Complete Guide to AI Marketing for Indian MSMEs"
+OUTPUT_DIR="ebook-output"
+mkdir -p $OUTPUT_DIR
+
+chapters=(
+  "Chapter 1: Understanding AI Marketing"
+  "Chapter 2: Setting Up Your Digital Presence"
+  "Chapter 3: Content Marketing with AI"
+  "Chapter 4: SEO for MSMEs"
+  "Chapter 5: Social Media Automation"
+)
+
+echo "# $TITLE" > $OUTPUT_DIR/00-intro.md
+gemini prompt "Write a 200-word introduction for an ebook: $TITLE. Audience: MSME owners in India." >> $OUTPUT_DIR/00-intro.md
+
+for i in "${!chapters[@]}"; do
+  CHAPTER="${chapters[$i]}"
+  FILE="$OUTPUT_DIR/$(printf '%02d' $((i+1)))-$(echo $CHAPTER | tr ' ' '-' | tr '[:upper:]' '[:lower:]').md"
+  echo "# $CHAPTER" > $FILE
+  gemini prompt "Write 500 words for: $CHAPTER in an ebook for Indian MSME owners. Include examples, tips, and 1 case study placeholder." >> $FILE
+  echo "Generated: $CHAPTER"
 done
-echo "Ebook draft saved to ebook_output.md"
+
+echo "Ebook generated in $OUTPUT_DIR/"
 ```
 
-## Email Course (5-Day)
-
+Run:
 ```bash
-gemini --model gemini-1.5-pro prompt \
-"Create a 5-day email course titled: '[Course Title]'. Each day: subject line, lesson title, 200-word lesson content, and one action step. Target: [audience]. Deliver one key insight per day."
+chmod +x ebook-generator.sh && ./ebook-generator.sh
 ```
 
-## Swipe File
+## Lead Magnet Types by Funnel Stage
 
-```bash
-gemini prompt \
-"Create a swipe file of 10 proven [type: ad headlines / email subject lines / CTA buttons / Instagram hooks] for [industry/niche]. Label each with the psychological trigger it uses (curiosity/urgency/social proof/etc.)."
-```
+| Funnel Stage | Lead Magnet Type | Example |
+|-------------|-----------------|----------|
+| Awareness | Checklist, Infographic | "25-Point MSME Marketing Audit" |
+| Consideration | Ebook, Guide, Webinar | "Complete AI Marketing Guide" |
+| Decision | Template, Swipe File | "50 Proven Email Subject Lines" |
+| Retention | Mini-course, Toolkit | "5-Day AI Marketing Course" |
 
-## Template Generator
+## Integration with This Repo
 
-```bash
-gemini --temperature 0.4 prompt \
-"Create a fill-in-the-blank template for [document type e.g. partnership proposal, investor pitch, sales script]. Target: [audience]. Mark all variable fields with [BRACKETS]. Include instructions at the top."
-```
+- Pair with `gemini-cli-cold-email` to deliver lead magnets via email sequences
+- Pair with `gemini-cli-copywriting` for landing page copy promoting the lead magnet
+- Pair with `gemini-cli-msme-growth` for India-specific lead magnet topics
+- Pair with `gemini-cli-content-strategy` to plan lead magnets as content pillars
 
-## India-Specific Lead Magnets
+## Tips
 
-```bash
-gemini prompt \
-"Create a lead magnet concept + outline for Indian MSME owners on the topic: 'How to Apply for PMEGP Loan in 2026 — Step-by-Step Guide'. Include: eligibility checklist, documents needed, and common mistakes to avoid. Simple English."
-```
-
-```bash
-gemini prompt \
-"Write a free guide titled: 'Top 10 Free AI Tools for Small Businesses in India (2026)'. Include tool name, what it does, free tier details, and a use case for an MSME. Format as a numbered list."
-```
-
-## Lead Magnet Title Generator
-
-```bash
-gemini --temperature 0.85 prompt \
-"Generate 15 lead magnet title ideas for a [type of business]. Mix formats: checklists, guides, templates, email courses, swipe files, calculators. Make each title result-oriented and specific."
-```
-
-## Temperature Guide
-
-| Task | Temperature |
-|---|---|
-| Checklists | 0.4–0.5 — factual, actionable |
-| Ebook outlines | 0.6 |
-| Email course content | 0.6 |
-| Title generation | 0.85 — creative |
-| Templates | 0.3 — structured |
-
-## Related Skills
-
-- `gemini-cli-cold-email` — deliver lead magnets via email
-- `gemini-cli-copywriting` — landing page copy for lead magnet
-- `gemini-cli-content-strategy` — plan lead magnets in content calendar
-- `gemini-cli-msme-growth` — India-specific lead generation
+- Lead magnets must solve ONE specific problem for ONE specific audience
+- Keep checklists to 15-25 items — not too short, not overwhelming
+- Always include your brand name and website in the lead magnet footer
+- Save generated content in `lead-magnets/[type]/[title]/` folders
+- Use temperature 0.4 for structured content, 0.6 for creative guides
