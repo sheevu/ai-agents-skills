@@ -1,114 +1,125 @@
 ---
 name: gemini-cli-social
-description: Use when the user wants to generate social media captions, posts, hashtags, or content for Instagram, LinkedIn, Twitter/X, Facebook, or YouTube using Gemini CLI. Trigger phrases: "Gemini CLI social media," "generate Instagram captions via terminal," "bulk social posts with Gemini," "LinkedIn content CLI." For ad copy, see gemini-cli-ad-creative.
-version: 1.0.0
-author: Sheevum Goel
-tags: [gemini-cli, social-media, instagram, linkedin, twitter, content-creation]
+description: "Use when the user wants to generate social media captions, posts, hashtags, or content for Instagram, LinkedIn, Twitter/X, Facebook, or YouTube using Gemini CLI. Trigger phrases: Gemini CLI social media, generate Instagram captions via terminal, bulk social posts with Gemini, LinkedIn content CLI. For ad copy see gemini-cli-copywriting."
+version: "1.0.0"
+author: "Sheevum Goel"
+tags:
+  - gemini-cli
+  - social-media
+  - instagram
+  - linkedin
+  - twitter
+  - content-creation
+  - hashtags
 ---
 
 ## Overview
 
-You are a Gemini CLI social media expert. Help the user generate platform-specific posts, captions, hashtags, and content calendars for all major social platforms using Gemini CLI commands.
+You are a Gemini CLI social media content expert. Help the user generate platform-specific posts, captions, hashtag sets, and content batches for Instagram, LinkedIn, Twitter/X, Facebook, and YouTube Shorts using Gemini CLI.
 
-## Platform-Specific Commands
+## When to Use
+
+- User needs bulk social media captions from terminal
+- User wants platform-specific post variations
+- User needs hashtag research and sets
+- User wants to generate a week's worth of posts at once
+- User needs YouTube Shorts scripts or LinkedIn articles
+
+## Prerequisites
+
+- Gemini CLI installed and authenticated (see `gemini-cli-setup`)
+- Platform targets defined: Instagram, LinkedIn, Twitter/X, Facebook, YouTube
+- Brand voice or tone guidelines (optional but recommended)
+
+## Core Social Media Commands
 
 ### Instagram Caption
 
 ```bash
-gemini --model gemini-1.5-pro --temperature 0.85 prompt \
-"Write an Instagram caption for [topic/image description]. Brand: [brand name]. Tone: [inspirational/funny/educational]. Include 5 relevant hashtags. Max 150 words."
+gemini prompt "Write an Instagram caption for a post about AI tools helping MSME owners save time. Tone: inspirational and conversational. Include 1 CTA and 15 relevant hashtags. Max 200 words."
 ```
 
 ### LinkedIn Post
 
 ```bash
-gemini --model gemini-1.5-pro --temperature 0.7 prompt \
-"Write a LinkedIn post from the perspective of [name], Founder of [company]. Topic: [topic]. Tone: thought leadership. Include a hook first line, 3 key insights, and end with a question to drive comments. Max 250 words."
+gemini prompt "Write a LinkedIn post from the perspective of an AI startup founder in Lucknow sharing a lesson learned about building for MSME clients in India. Professional tone with a hook opener. 150-200 words. No hashtag spam."
 ```
 
 ### Twitter/X Thread
 
 ```bash
-gemini --model gemini-1.5-pro prompt \
-"Write a 5-tweet Twitter thread about [topic]. Tweet 1: hook/bold claim. Tweets 2-4: insights with data. Tweet 5: CTA or takeaway. Each tweet under 280 chars."
+gemini prompt "Write a 7-tweet thread about why AI marketing tools are the next big opportunity for Indian MSMEs. Start with a viral hook. Each tweet max 280 characters. End with a CTA to visit a landing page."
+```
+
+### YouTube Shorts Script
+
+```bash
+gemini prompt "Write a 60-second YouTube Shorts script about: 3 ways AI can help kirana store owners grow sales. Include hook (5 sec), main content (45 sec), CTA (10 sec). Conversational, energetic tone."
 ```
 
 ### Facebook Post
 
 ```bash
-gemini --temperature 0.75 prompt \
-"Write a Facebook post for [business type] in [city/region], India. Topic: [topic]. Tone: friendly and community-focused. Include a question at the end to boost engagement."
+gemini prompt "Write a Facebook post targeting MSME owners in India announcing the launch of an AI CRM free trial. Tone: friendly, exciting. Include emoji. Max 150 words."
 ```
 
-### YouTube Description
+### Hashtag Set Generator
 
 ```bash
-gemini --temperature 0.4 prompt \
-"Write a YouTube video description for a video titled: '[video title]'. Include: 2-line hook, 5 bullet points of what viewers learn, target keywords: [keywords], and 3 hashtags. Max 300 words."
+gemini prompt "Generate 3 sets of 20 Instagram hashtags for an AI marketing agency in India. Set 1: broad reach (1M+ posts). Set 2: niche (100K-500K posts). Set 3: hyper-local (Lucknow, UP, India focused). No repeats across sets."
 ```
 
-## Hashtag Generator
+## Automation Script: Weekly Social Content Batch
 
 ```bash
-gemini prompt \
-"Generate 30 hashtags for a [niche] brand in India. Mix: 10 high-volume (1M+ posts), 10 mid-volume (100K–1M), 10 niche (under 100K). Format as a copy-paste ready list."
+#!/bin/bash
+# weekly-social.sh — Generate a week of social media content
+
+WEEK="Week 1 June 2025"
+BRAND="Sheevum Digital"
+OUTPUT_FILE="social-content-$WEEK.md"
+
+echo "# Social Media Content: $WEEK" > $OUTPUT_FILE
+echo "Brand: $BRAND" >> $OUTPUT_FILE
+echo "" >> $OUTPUT_FILE
+
+for DAY in Monday Tuesday Wednesday Thursday Friday; do
+  echo "## $DAY" >> $OUTPUT_FILE
+  echo "### Instagram" >> $OUTPUT_FILE
+  gemini prompt "Write a $DAY Instagram post for $BRAND, an AI marketing agency. Educational tone. Include caption + 10 hashtags." >> $OUTPUT_FILE
+  echo "### LinkedIn" >> $OUTPUT_FILE
+  gemini prompt "Write a $DAY LinkedIn post for $BRAND founder. Insight or lesson format. 100 words." >> $OUTPUT_FILE
+  echo "" >> $OUTPUT_FILE
+done
+
+echo "Done! Saved to $OUTPUT_FILE"
 ```
 
-## Bulk Content for Multiple Platforms
-
-Create `topics.txt`:
-```
-AI automation for MSMEs
-Startup India scheme benefits 2026
-How to grow business with WhatsApp
-```
-
-Run for all platforms:
+Run:
 ```bash
-while IFS= read -r topic; do
-  echo "=== TOPIC: $topic ===" >> social_content.txt
-  gemini --model gemini-1.5-flash prompt \
-  "Write: 1) Instagram caption (100 words + hashtags), 2) LinkedIn post (150 words), 3) Twitter post (280 chars) for topic: $topic. Brand voice: professional but relatable." >> social_content.txt
-  echo "" >> social_content.txt
-done < topics.txt
+chmod +x weekly-social.sh && ./weekly-social.sh
 ```
 
-## India / MSME-Specific Social Content
+## Platform Tone Guide
 
-### Hindi + English (Hinglish) Instagram
+| Platform | Tone | Best Content Types |
+|----------|------|-------------------|
+| Instagram | Visual, inspirational | Carousels, reels, stories |
+| LinkedIn | Professional, insightful | Thought leadership, case studies |
+| Twitter/X | Punchy, opinionated | Threads, hot takes, stats |
+| Facebook | Friendly, community | Announcements, polls, events |
+| YouTube | Educational, storytelling | Tutorials, vlogs, interviews |
 
-```bash
-gemini --temperature 0.9 prompt \
-"Write an Instagram caption in Hinglish (mix of Hindi and English) for a post about [topic] targeting young Indian entrepreneurs. Add 5 trending Indian startup hashtags."
-```
+## Integration with This Repo
 
-### Startup India / Government Scheme Post
+- Pair with `gemini-cli-content-strategy` for a strategic calendar
+- Pair with `gemini-cli-copywriting` for ad creative copy
+- Pair with `gemini-cli-msme-growth` for India-specific social content
 
-```bash
-gemini prompt \
-"Write a LinkedIn post explaining the key benefits of the [scheme name e.g. PMEGP/MUDRA/Startup India] for small business owners. Professional yet simple. Include a CTA to DM for help."
-```
+## Tips
 
-## Content Calendar (30 Days)
-
-```bash
-gemini --model gemini-1.5-pro prompt \
-"Create a 30-day social media content calendar for a [business type] brand. Include: day, platform, post topic, content type (reel/carousel/post/story). Format as a markdown table."
-```
-
-## Tone Guide
-
-| Platform | Temperature | Tone |
-|---|---|---|
-| LinkedIn | 0.6–0.7 | Professional, insightful |
-| Instagram | 0.85–0.9 | Creative, visual, punchy |
-| Twitter/X | 0.8 | Sharp, opinionated |
-| Facebook | 0.7 | Friendly, community |
-| YouTube | 0.4 | Informative, keyword-rich |
-
-## Related Skills
-
-- `gemini-cli-copywriting` — brand copy
-- `gemini-cli-content-strategy` — full content plan
-- `gemini-cli-ad-creative` — paid social ads
-- `gemini-cli-lead-magnets` — content upgrades to grow following
+- Generate 3-5 variations per post and choose the best
+- Always humanize AI captions before publishing
+- Use temperature 0.7-0.8 for creative social content
+- Save outputs weekly in `social-content/YYYY-WW/` folders
+- Review hashtag relevance manually before using
