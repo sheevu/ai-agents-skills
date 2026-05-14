@@ -1,127 +1,114 @@
 ---
 name: gemini-cli-setup
-description: Use when the user wants to install, authenticate, or configure Google Gemini CLI on their system. Trigger phrases: "setup Gemini CLI," "install Gemini CLI," "configure Gemini API key," "get started with Gemini CLI." For specific tasks, see gemini-cli-copywriting, gemini-cli-seo.
-version: 1.0.0
-author: Sheevum Goel
-tags: [gemini-cli, setup, install, authentication, configuration]
+description: "Use when the user wants to install, authenticate, or configure Google Gemini CLI on their system. Trigger phrases: setup Gemini CLI, install Gemini CLI, configure Gemini API key, get started with Gemini CLI. For specific tasks see gemini-cli-copywriting or gemini-cli-seo."
+version: "1.0.0"
+author: "Sheevum Goel"
+tags:
+  - gemini-cli
+  - setup
+  - install
+  - authentication
+  - configuration
 ---
 
 ## Overview
 
-You are a Gemini CLI setup expert. Help the user install, authenticate, and configure Google Gemini CLI so they can run AI-powered marketing tasks directly from the terminal.
+You are a Gemini CLI setup expert. Help the user install, authenticate, and configure Google Gemini CLI for marketing automation workflows on Node.js or Python environments.
+
+## When to Use
+
+- User wants to install Gemini CLI for the first time
+- User needs to configure their Gemini API key
+- User is troubleshooting CLI auth or connection issues
+- User wants to verify their setup before running marketing scripts
 
 ## Prerequisites
 
-- Node.js 18+ installed (`node --version` to check)
-- A Google account with Gemini API access
-- API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
+- Node.js v18+ OR Python 3.9+
+- A Google Cloud / AI Studio account
+- A valid Gemini API key from https://aistudio.google.com/app/apikey
 
 ## Installation
 
-### Option 1: Node.js (Recommended)
+### Node.js (Recommended)
 
 ```bash
 npm install -g @google/generative-ai-cli
 ```
 
-Verify install:
+Verify installation:
+
 ```bash
 gemini --version
 ```
 
-### Option 2: Python
+### Python
 
 ```bash
 pip install google-generativeai
 ```
 
-### Option 3: Run without install (npx)
-
-```bash
-npx @google/generative-ai-cli prompt "Hello Gemini"
-```
-
 ## Authentication
 
-### Set API Key (Linux/Mac)
+### Set API Key (Linux/macOS)
 
 ```bash
 export GEMINI_API_KEY=your_api_key_here
 ```
 
-Make it permanent by adding to `~/.bashrc` or `~/.zshrc`:
-```bash
-echo 'export GEMINI_API_KEY=your_api_key_here' >> ~/.bashrc
-source ~/.bashrc
-```
+### Set API Key (Windows PowerShell)
 
-### Set API Key (Windows)
-
-```cmd
-set GEMINI_API_KEY=your_api_key_here
-```
-
-Permanent via PowerShell:
 ```powershell
-[System.Environment]::SetEnvironmentVariable('GEMINI_API_KEY', 'your_key', 'User')
+$env:GEMINI_API_KEY="your_api_key_here"
 ```
 
-### Set API Key via `.env` file
-
-Create a `.env` file in your project folder:
-```
-GEMINI_API_KEY=your_api_key_here
-```
-
-Load it before running:
-```bash
-source .env && gemini prompt "Test message"
-```
-
-## First Test
+### Persist API Key in `.env`
 
 ```bash
-gemini prompt "Say hello in one line"
+echo "GEMINI_API_KEY=your_api_key_here" >> .env
 ```
 
-Expected output: `Hello! How can I help you today?`
-
-## Model Selection
+Load in scripts:
 
 ```bash
-# Use Gemini 1.5 Pro (default, best for marketing)
-gemini --model gemini-1.5-pro prompt "Your task here"
-
-# Use Gemini 1.5 Flash (faster, cheaper for bulk tasks)
-gemini --model gemini-1.5-flash prompt "Your task here"
-
-# Use Gemini 2.0 Flash (latest, fastest)
-gemini --model gemini-2.0-flash prompt "Your task here"
+export $(cat .env | xargs)
 ```
 
-## Useful Flags
+## Test Your Setup
 
-| Flag | Purpose | Example |
-|---|---|---|
-| `--model` | Choose model | `--model gemini-1.5-flash` |
-| `--temperature` | Creativity (0.0–1.0) | `--temperature 0.7` |
-| `--max-tokens` | Output length | `--max-tokens 500` |
-| `--file` | Input from file | `--file prompt.txt` |
-| `--output` | Save to file | `--output result.txt` |
+```bash
+gemini prompt "Say hello in one sentence"
+```
+
+Expected output: A short greeting from Gemini confirming the CLI is working.
+
+## Recommended Configuration
+
+```bash
+# Set default model
+export GEMINI_MODEL=gemini-1.5-pro
+
+# Set temperature for creative tasks
+export GEMINI_TEMPERATURE=0.7
+
+# Set temperature for factual/SEO tasks
+export GEMINI_TEMPERATURE=0.2
+```
 
 ## Troubleshooting
 
-| Error | Fix |
-|---|---|
-| `GEMINI_API_KEY not set` | Export key again: `export GEMINI_API_KEY=...` |
-| `Command not found` | Re-run: `npm install -g @google/generative-ai-cli` |
-| `Quota exceeded` | Switch model to `gemini-1.5-flash` or wait |
-| `Invalid API key` | Regenerate key at aistudio.google.com |
+| Issue | Fix |
+|-------|-----|
+| `command not found: gemini` | Re-run `npm install -g @google/generative-ai-cli` |
+| `API key not valid` | Regenerate key from AI Studio |
+| `Permission denied` | Use `sudo npm install -g` or fix npm permissions |
+| `Module not found` | Run `npm cache clean --force` then reinstall |
 
 ## Next Steps
 
-Once setup is complete, use these skills:
-- `gemini-cli-copywriting` — generate ad copy and taglines
-- `gemini-cli-seo` — bulk SEO tasks
-- `gemini-cli-cold-email` — draft outreach emails
-- `gemini-cli-msme-growth` — India-specific marketing content
+Once setup is complete, proceed to:
+- `gemini-cli-copywriting` — Generate marketing copy
+- `gemini-cli-seo` — Automate SEO tasks
+- `gemini-cli-social` — Create social media content
+- `gemini-cli-cold-email` — Draft cold outreach emails
+- `gemini-cli-msme-growth` — MSME-specific content automation
